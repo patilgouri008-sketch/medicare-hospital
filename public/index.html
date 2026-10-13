@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MediCare Hospital | Appointment Booking</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <header class="navbar">
+    <div class="container nav-container">
+      <div class="logo">
+        <span class="logo-icon">+</span>
+        <span class="logo-text">MediCare <strong>Hospital</strong></span>
+      </div>
+      <nav class="nav-links">
+        <a href="#home">Home</a>
+        <a href="#doctors">Doctors</a>
+        <a href="#booking">Book Appointment</a>
+        <a href="#appointments">Appointments</a>
+        <a href="#status">Diagnostics</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+      <div class="hero-content">
+        <span class="badge">Trusted Healthcare Specialists</span>
+        <h1>Book an Appointment with Top Doctors</h1>
+        <p class="hero-desc">
+          Quality healthcare at your convenience. Select your specialist, choose your preferred slot, and book your visit instantly with our real-time scheduling system.
+        </p>
+        <div class="hero-actions">
+          <a href="#booking" class="btn btn-primary">Book Consultation</a>
+          <a href="#doctors" class="btn btn-secondary">Explore Doctors</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Doctors Section -->
+    <section class="doctors-section" id="doctors">
+      <div class="section-header">
+        <span class="badge">Medical Staff</span>
+        <h2>Our Expert Doctors</h2>
+        <p>Choose from our certified specialists across diverse hospital departments.</p>
+      </div>
+      <div id="doctors-container" class="doctors-grid">
+        <div class="info-card">
+          <p>Loading medical specialists from database...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Booking Section -->
+    <section class="booking-section" id="booking">
+      <div class="section-header">
+        <span class="badge">Online Scheduling</span>
+        <h2>Book Your Appointment</h2>
+        <p>Select your doctor, preferred date and time slot. Duplicate slots are automatically locked.</p>
+      </div>
+
+      <div class="booking-card">
+        <form id="appointment-form" class="booking-form">
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="doctor-select">Select Doctor <span class="required">*</span></label>
+              <select id="doctor-select" required>
+                <option value="">-- Choose a Doctor --</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="appointment-date">Appointment Date <span class="required">*</span></label>
+              <input type="date" id="appointment-date" required>
+            </div>
+
+            <div class="form-group">
+              <label for="appointment-time">Preferred Time Slot <span class="required">*</span></label>
+              <select id="appointment-time" required>
+                <option value="">-- Select Time Slot --</option>
+                <option value="09:00">09:00 AM</option>
+                <option value="10:00">10:00 AM</option>
+                <option value="11:00">11:00 AM</option>
+                <option value="12:00">12:00 PM</option>
+                <option value="14:00">02:00 PM</option>
+                <option value="15:00">03:00 PM</option>
+                <option value="16:00">04:00 PM</option>
+              </select>
+              <small id="slot-feedback" class="form-hint">Choose doctor and date to verify slot availability.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-name">Patient Full Name <span class="required">*</span></label>
+              <input type="text" id="patient-name" placeholder="e.g. John Doe" required>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-email">Patient Email Address <span class="required">*</span></label>
+              <input type="email" id="patient-email" placeholder="e.g. john@example.com" required>
+            </div>
+
+            <div class="form-group">
+              <label for="patient-phone">Phone Number</label>
+              <input type="tel" id="patient-phone" placeholder="e.g. +1 555-0199">
+            </div>
+
+            <div class="form-group full-width">
+              <label for="appointment-notes">Reason for Visit / Symptoms</label>
+              <textarea id="appointment-notes" rows="3" placeholder="Briefly describe the symptoms or reason for your visit..."></textarea>
+            </div>
+          </div>
+
+          <div id="booking-alert" class="alert hidden"></div>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-booking-btn" class="btn btn-primary btn-large">
+              Confirm &amp; Schedule Appointment
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- Appointments History / Scheduled List Section -->
+    <section class="appointments-section" id="appointments">
+      <div class="section-header">
+        <div class="header-split">
+          <div>
+            <span class="badge">Live Schedule</span>
+            <h2>Scheduled Appointments</h2>
+            <p>Confirmed appointments stored in Supabase PostgreSQL.</p>
+          </div>
+          <button id="btn-refresh-appointments" class="btn btn-secondary btn-sm">&#x21bb; Refresh</button>
+        </div>
+      </div>
+
+      <div class="card appointments-card">
+        <div id="appointments-container" class="appointments-list">
+          <p class="placeholder-text">Loading appointments...</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Diagnostics / Health Status Section -->
+    <section class="status-section" id="status">
+      <div class="card status-card">
+        <div class="card-header">
+          <h2>Backend &amp; Database Diagnostics</h2>
+          <span class="status-indicator" id="status-badge">Checking...</span>
+        </div>
+        <p class="status-description">Live response from <code>GET /api/health</code>:</p>
+        <pre class="json-display" id="health-output">Loading health status...</pre>
+        <div class="card-footer">
+          <button class="btn btn-secondary btn-sm" id="btn-check-api">Re-check Diagnostics</button>
+          <span id="last-updated">Last checked: Never</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer-content">
+      <p>&copy; 2026 MediCare Hospital. All rights reserved.</p>
+      <p>Backend powered by Node.js, Express.js &amp; Supabase PostgreSQL</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
